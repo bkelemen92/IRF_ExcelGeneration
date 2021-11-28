@@ -117,7 +117,7 @@ namespace ExcelGeneration.Entities
             lastColumnRange.NumberFormat = "#,#.00 Ft";
         }
 
-        private static void CloseExcelApp()
+        public static void CloseExcelApp()
         {
             xlWb.Close(false);
             xlApp.Quit();
