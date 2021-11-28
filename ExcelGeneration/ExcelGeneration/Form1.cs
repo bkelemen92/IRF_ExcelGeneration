@@ -24,7 +24,7 @@ namespace ExcelGeneration
         {
             InitializeComponent();
             LoadData();
-            ExcelFunctions.CreateExcel();
+            ExcelFunctions.CreateExcel(Flats);
         }
 
         private void LoadData()
