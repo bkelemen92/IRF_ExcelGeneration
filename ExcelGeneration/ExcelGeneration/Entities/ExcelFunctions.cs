@@ -7,6 +7,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Windows.Forms;
 using ExcelGeneration.Data;
+using System.Drawing;
 
 namespace ExcelGeneration.Entities
 {
@@ -15,6 +16,8 @@ namespace ExcelGeneration.Entities
         static Excel.Application xlApp;
         static Excel.Workbook xlWb;
         static Excel.Worksheet xlWs;
+
+        static string[] headers = new string[] { "Kód", "Eladó", "Oldal", "Kerület", "Lift", "Szobák száma", "Alapterület (m2)", "Ár (mFt)", "Négyzetméter ár (Ft/m2)" };
 
         public static void CreateExcel(List<Flat> flats)
         {
@@ -41,7 +44,7 @@ namespace ExcelGeneration.Entities
 
         private static void CreateTable(List<Flat> flats)
         {
-            string[] headers = new string[] { "Kód", "Eladó", "Oldal", "Kerület", "Lift", "Szobák száma", "Alapterület (m2)", "Ár (mFt)", "Négyzetméter ár (Ft/m2)" };
+            
             object[,] values = new object[flats.Count, headers.Length];
 
             for (int i = 0; i < headers.Length; i++)
@@ -65,6 +68,8 @@ namespace ExcelGeneration.Entities
             }
 
             xlWs.get_Range(GetCellInRange(2, 1), GetCellInRange(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
+            FormatTable(flats);
         }
 
         private static string GetCellInRange(int x, int y)
@@ -82,6 +87,34 @@ namespace ExcelGeneration.Entities
             ExcelCoordinate += x.ToString();
 
             return ExcelCoordinate;
+        }
+
+        private static void FormatTable(List<Flat> flats)
+        {
+            Excel.Range headerRange = xlWs.get_Range(GetCellInRange(1, 1), GetCellInRange(1, headers.Length));
+            Excel.Range valuesRange = xlWs.get_Range(GetCellInRange(2, 1), GetCellInRange(flats.Count + 1, headers.Length));
+            Excel.Range firstColumnRange = xlWs.get_Range(GetCellInRange(2, 1), GetCellInRange(flats.Count + 1, 1));
+            Excel.Range lastColumnRange = xlWs.get_Range(GetCellInRange(2, headers.Length), GetCellInRange(flats.Count + 1, headers.Length));
+
+            //Header format
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            //Values format
+            valuesRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            //First column format
+            firstColumnRange.Font.Bold = true;
+            firstColumnRange.Interior.Color = Color.LightYellow;
+
+            //Last column format
+            lastColumnRange.Interior.Color = Color.LightGreen;
+            lastColumnRange.NumberFormat = "#,#.00 Ft";
         }
 
         private static void CloseExcelApp()
