@@ -7,14 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ExcelGeneration.Data;
 
 namespace ExcelGeneration
 {
     public partial class Form1 : Form
     {
+        List<Flat> Flats;
+        RealEstateEntities context = new RealEstateEntities();
+
         public Form1()
         {
             InitializeComponent();
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            Flats = context.Flats.ToList();
         }
     }
 }
