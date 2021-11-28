@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ExcelGeneration.Data;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using ExcelGeneration.Entities;
 
 namespace ExcelGeneration
 {
@@ -17,11 +18,13 @@ namespace ExcelGeneration
     {
         List<Flat> Flats;
         RealEstateEntities context = new RealEstateEntities();
+        //ExcelFunctions ExcelFn = new ExcelFunctions();
 
         public Form1()
         {
             InitializeComponent();
             LoadData();
+            ExcelFunctions.CreateExcel();
         }
 
         private void LoadData()

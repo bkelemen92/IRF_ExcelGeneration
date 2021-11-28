@@ -73,6 +73,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FlatsData.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Entities\ExcelFunctions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
